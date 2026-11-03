@@ -1,0 +1,17 @@
+# Showcase fork only (never part of an upstream pull request).
+# No lockfile in the repo; its CI installs with pnpm 9 and --no-frozen-lockfile.
+# Vite's root is __tests__ (the dev demo page). vite.config.mjs switches to built dist files when CI is set,
+# so start clears it. Measured: vite dev server about 580 MB RSS.
+version: 1
+app:
+  install: "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npx -y pnpm@9.15.9 install --no-frozen-lockfile"
+  start: CI= BROWSER=none ./node_modules/.bin/vite --port {port} --host 0.0.0.0
+  url: http://localhost:{port}
+  readyPath: /
+  readyStatus: 200
+  runtime: node22
+  env:
+    NODE_ENV: development
+demo:
+  maxVideos: 1
+  beforePass: true
